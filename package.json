@@ -2,8 +2,9 @@
   "name": "qmk-json-to-zmk",
   "version": "1.0.0",
   "description": "Convert qmk json to zmk keymap config",
-  "main": "index.js",
+  "bin": "bin.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
