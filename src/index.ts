@@ -22,7 +22,7 @@ const result = layers.map((layer) => {
 console.log(
   result
     .map(
-      (bindings) => `                layer {
+      (bindings, i) => `                layer_${i} {
                         bindings = <
 ${bindings.map((chunk) => `   ${chunk.join(" ")}`).join("\n")}
                         >;
