@@ -136,14 +136,14 @@ const layerFuncMap = {
 
 function mapSpecial(func: string, key: string): string | null {
   const mappedKey = mapNormalKeyWithoutBehaviour(key);
-  // if (!mappedKey) return null;
+  if (!mappedKey) return null;
   const isModifier = func in modifierMap
   if (isModifier) {
-    return modifierMap[func as keyof typeof modifierMap](mappedKey || '');
+    return modifierMap[func as keyof typeof modifierMap](mappedKey);
   }
   const isSpecial = func in specialMap
   if (!isSpecial) return null;
-  return specialMap[func as keyof typeof specialMap](mappedKey || '');
+  return specialMap[func as keyof typeof specialMap](mappedKey);
 }
 const modifierMap = {
   LCA: (key: string) => `&kp LC(LA(${key}))`,
