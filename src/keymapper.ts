@@ -1,8 +1,8 @@
 export function keymapper(key: string): string {
   const mappedKey = mapKey(key);
   if (mappedKey) return mappedKey;
-  console.error('WARNING, unrecognised:', key)
-  return '&none';
+  console.error("WARNING, unrecognised:", key);
+  return "&none";
 }
 
 function mapKey(key: string): string | null {
@@ -34,7 +34,7 @@ function mapNormalKeyWithoutBehaviour(key: string) {
   const normalKey = result[1];
   if (normalKey.length === 1) {
     if (/[A-Z]/.test(normalKey)) {
-      return normalKey
+      return normalKey;
     }
     return `N${normalKey}`;
   } else if (normalKey in normalMap) {
@@ -43,74 +43,81 @@ function mapNormalKeyWithoutBehaviour(key: string) {
   return null;
 }
 const miscMap = {
-  KC_NO: '&none',
-  KC_TRNS: '&trans',
-}
+  KC_NO: "&none",
+  KC_TRNS: "&trans",
+  RESET: "&reset",
+};
 const normalMap = {
-  EXLM: 'EXCLAMATION',
-  DLR: 'DOLLAR',
-  PERC: 'PERCENT',
-  CIRC: 'CARET',
-  AMPR: 'AMPERSAND',
-  ASTR: 'ASTERISK',
-  EQL: 'EQUAL',
-  MINS: 'MINUS',
-  GRV: 'GRAVE',
-  BSPC: 'BACKSPACE',
-  TILD: 'TILDE',
-  BSLS: 'BACKSLASH',
-  LCBR: 'LEFT_BRACE',
-  RCBR: 'RIGHT_BRACE',
-  LBRC: 'LEFT_BRACKET',
-  RBRC: 'RIGHT_BRACKET',
-  LPRN: 'LEFT_PARENTHESIS',
-  RPRN: 'RIGHT_PARENTHESIS',
-  UNDS: 'UNDERSCORE',
-  COMM: 'COMMA',
-  QUOT: 'SINGLE_QUOTE',
-  SCLN: 'SEMICOLON',
-  LCTL: 'LCTRL',
-  RCTL: 'RCTRL',
-  LSFT: 'LSHIFT',
-  RSFT: 'RSHIFT',
-  SPC: 'SPACE',
-  SLSH: 'SLASH',
-  PAST: 'KP_MULTIPLY',
-  PPLS: 'KP_PLUS',
-  PSLS: 'KP_SLASH',
-  PMNS: 'KP_MINUS',
-  PEQL: 'KP_EQUAL',
-  PDOT: 'KP_DOT',
+  EXLM: "EXCLAMATION",
+  DLR: "DOLLAR",
+  PERC: "PERCENT",
+  CIRC: "CARET",
+  AMPR: "AMPERSAND",
+  ASTR: "ASTERISK",
+  EQL: "EQUAL",
+  MINS: "MINUS",
+  GRV: "GRAVE",
+  BSPC: "BACKSPACE",
+  TILD: "TILDE",
+  BSLS: "BACKSLASH",
+  LCBR: "LEFT_BRACE",
+  RCBR: "RIGHT_BRACE",
+  LBRC: "LEFT_BRACKET",
+  RBRC: "RIGHT_BRACKET",
+  LPRN: "LEFT_PARENTHESIS",
+  RPRN: "RIGHT_PARENTHESIS",
+  UNDS: "UNDERSCORE",
+  COMM: "COMMA",
+  QUOT: "SINGLE_QUOTE",
+  SCLN: "SEMICOLON",
+  LCTL: "LCTRL",
+  RCTL: "RCTRL",
+  LSFT: "LSHIFT",
+  RSFT: "RSHIFT",
+  SPC: "SPACE",
+  SLSH: "SLASH",
+  PAST: "KP_MULTIPLY",
+  PPLS: "KP_PLUS",
+  PSLS: "KP_SLASH",
+  PMNS: "KP_MINUS",
+  PEQL: "KP_EQUAL",
+  PDOT: "KP_DOT",
 
-  VOLD: 'C_VOLUME_DOWN',
-  MUTE: 'K_MUTE',
-  VOLU: 'C_VOLUME_UP',
-  SLEP: 'C_SLEEP',
-  BRIU: 'C_BRIGHTNESS_INC',
-  BRID: 'C_BRIGHTNESS_DEC',
+  VOLD: "C_VOLUME_DOWN",
+  MUTE: "K_MUTE",
+  VOLU: "C_VOLUME_UP",
+  MRWD: "C_REWIND",
+  MPRV: "C_PREVIOUS",
+  MPLY: "C_PLAY_PAUSE",
+  MNXT: "C_NEXT",
+  MFFD: "C_FAST_FORWARD",
+  SLEP: "C_SLEEP",
+  BRIU: "C_BRIGHTNESS_INC",
+  BRID: "C_BRIGHTNESS_DEC",
+
   // same
-  TAB: 'TAB',
-  ESC: 'ESCAPE',
-  DOT: 'DOT',
-  ENT: 'ENTER',
-  LGUI: 'LGUI',
-  RGUI: 'RGUI',
-  LALT: 'LALT',
-  RALT: 'RALT',
-  DEL: 'DELETE',
-  UP: 'UP',
-  DOWN: 'DOWN',
-  LEFT: 'LEFT',
-  RGHT: 'RIGHT',
-  AT: 'AT',
-  HASH: 'HASH',
-  PLUS: 'PLUS',
-  LT: 'LESS_THAN',
-  GT: 'GREATER_THAN',
-  PIPE: 'PIPE',
-  HOME: 'HOME',
-  END: 'END',
-}
+  TAB: "TAB",
+  ESC: "ESCAPE",
+  DOT: "DOT",
+  ENT: "ENTER",
+  LGUI: "LGUI",
+  RGUI: "RGUI",
+  LALT: "LALT",
+  RALT: "RALT",
+  DEL: "DELETE",
+  UP: "UP",
+  DOWN: "DOWN",
+  LEFT: "LEFT",
+  RGHT: "RIGHT",
+  AT: "AT",
+  HASH: "HASH",
+  PLUS: "PLUS",
+  LT: "LESS_THAN",
+  GT: "GREATER_THAN",
+  PIPE: "PIPE",
+  HOME: "HOME",
+  END: "END",
+};
 
 function mapFunctions(key: string) {
   const result = /^([\w_]+)\((\w+)\)$/.exec(key);
@@ -123,25 +130,25 @@ function mapFunctions(key: string) {
 }
 
 function mapLayer(func: string, layer: string) {
-  const isLayerFunc = func in layerFuncMap
+  const isLayerFunc = func in layerFuncMap;
   if (!isLayerFunc) return null;
   return `${layerFuncMap[func as keyof typeof layerFuncMap]} ${layer}`;
 }
 const layerFuncMap = {
-  MO: '&mo',
-  TO: '&to',
-  TG: '&tog',
-  DF: '&to',
-}
+  MO: "&mo",
+  TO: "&to",
+  TG: "&tog",
+  DF: "&to",
+};
 
 function mapSpecial(func: string, key: string): string | null {
   const mappedKey = mapNormalKeyWithoutBehaviour(key);
   if (!mappedKey) return null;
-  const isModifier = func in modifierMap
+  const isModifier = func in modifierMap;
   if (isModifier) {
     return modifierMap[func as keyof typeof modifierMap](mappedKey);
   }
-  const isSpecial = func in specialMap
+  const isSpecial = func in specialMap;
   if (!isSpecial) return null;
   return specialMap[func as keyof typeof specialMap](mappedKey);
 }
@@ -153,7 +160,7 @@ const modifierMap = {
   LGUI: (key: string) => `&kp LG(${key})`,
   RGUI: (key: string) => `&kp RG(${key})`,
   SGUI: (key: string) => `&kp LG(LS(${key}))`,
-}
+};
 const specialMap = {
   LGUI_T: (key: string) => `&mt LGUI ${key}`,
   RGUI_T: (key: string) => `&mt RGUI ${key}`,
@@ -163,4 +170,4 @@ const specialMap = {
   RCTL_T: (key: string) => `&mt LCTRL ${key}`,
   LALT_T: (key: string) => `&mt LALT ${key}`,
   RALT_T: (key: string) => `&mt RALT ${key}`,
-}
+};
