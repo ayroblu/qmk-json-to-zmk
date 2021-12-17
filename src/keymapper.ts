@@ -38,7 +38,7 @@ function mapNormalKeyWithoutBehaviour(key: string) {
     }
     return `N${normalKey}`;
   } else if (normalKey in normalMap) {
-    return `${normalMap[normalKey as keyof typeof normalMap]}`;
+    return normalMap[normalKey as keyof typeof normalMap];
   }
   return null;
 }
@@ -121,7 +121,17 @@ const normalMap = {
 
 function mapFunctions(key: string) {
   const result = /^([\w_]+)\((\w+)\)$/.exec(key);
-  if (!result) return null;
+  if (!result) {
+    const multiResult = /^([\w_]+)\((\w+),(\w+)\)$/.exec(key);
+    if (!multiResult) return null;
+    const layerModResult = mapLayerMod(
+      multiResult[1],
+      multiResult[2].trim(),
+      multiResult[3].trim()
+    );
+    if (layerModResult) return layerModResult;
+    return null;
+  }
   const layerResult = mapLayer(result[1], result[2]);
   if (layerResult) return layerResult;
   const specialResult = mapSpecial(result[1], result[2]);
@@ -130,9 +140,10 @@ function mapFunctions(key: string) {
 }
 
 function mapLayer(func: string, layer: string) {
-  const isLayerFunc = func in layerFuncMap;
-  if (!isLayerFunc) return null;
-  return `${layerFuncMap[func as keyof typeof layerFuncMap]} ${layer}`;
+  if (func in layerFuncMap) {
+    return `${layerFuncMap[func as keyof typeof layerFuncMap]} ${layer}`;
+  }
+  return null;
 }
 const layerFuncMap = {
   MO: "&mo",
@@ -141,16 +152,40 @@ const layerFuncMap = {
   DF: "&to",
 };
 
+function mapLayerMod(func: string, layer: string, key: string): string | null {
+  if (func in layerModFuncMap) {
+    const mappedKey = mapNormalKeyWithoutBehaviour(key);
+    if (!mappedKey) return null;
+    return layerModFuncMap[func as keyof typeof layerModFuncMap](
+      layer,
+      mappedKey
+    );
+  }
+  return null;
+}
+const layerModFuncMap = {
+  LT: (layer: string, key: string) => `&lt ${layer} ${key}`,
+};
+
 function mapSpecial(func: string, key: string): string | null {
-  const mappedKey = mapNormalKeyWithoutBehaviour(key);
-  if (!mappedKey) return null;
-  const isModifier = func in modifierMap;
-  if (isModifier) {
+  if (func in modifierMap) {
+    const mappedKey = mapNormalKeyWithoutBehaviour(key);
+    if (!mappedKey) return null;
     return modifierMap[func as keyof typeof modifierMap](mappedKey);
   }
-  const isSpecial = func in specialMap;
-  if (!isSpecial) return null;
-  return specialMap[func as keyof typeof specialMap](mappedKey);
+
+  if (func in specialMap) {
+    const mappedKey = mapNormalKeyWithoutBehaviour(key);
+    if (!mappedKey) return null;
+    return specialMap[func as keyof typeof specialMap](mappedKey);
+  }
+
+  if (func in specialModMap) {
+    const mappedKey = mapNormalKeyWithoutBehaviour(key) || mapModKey(key);
+    if (!mappedKey) return null;
+    return specialModMap[func as keyof typeof specialModMap](mappedKey);
+  }
+  return null;
 }
 const modifierMap = {
   LCA: (key: string) => `&kp LC(LA(${key}))`,
@@ -170,4 +205,30 @@ const specialMap = {
   RCTL_T: (key: string) => `&mt LCTRL ${key}`,
   LALT_T: (key: string) => `&mt LALT ${key}`,
   RALT_T: (key: string) => `&mt RALT ${key}`,
+};
+const specialModMap = {
+  OSM: (key: string) => `&sk ${key}`,
+};
+
+function mapModKey(key: string) {
+  const result = /^MOD_(\w+)$/.exec(key);
+  if (!result) {
+    return null;
+  }
+  const modKey = result[1];
+  if (modKey in modMap) {
+    return `${modMap[modKey as keyof typeof modMap]}`;
+  }
+  return null;
+}
+// A subset of the normalMap!
+const modMap = {
+  LGUI: "LGUI",
+  RGUI: "RGUI",
+  LALT: "LALT",
+  RALT: "RALT",
+  LCTL: "LCTRL",
+  RCTL: "RCTRL",
+  LSFT: "LSHIFT",
+  RSFT: "RSHIFT",
 };
