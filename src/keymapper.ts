@@ -46,6 +46,7 @@ const miscMap = {
   KC_NO: "&none",
   KC_TRNS: "&trans",
   RESET: "&reset",
+  QK_BOOT: "&reset",
 };
 const normalMap = {
   EXLM: "EXCLAMATION",
@@ -69,6 +70,7 @@ const normalMap = {
   UNDS: "UNDERSCORE",
   COMM: "COMMA",
   QUOT: "SINGLE_QUOTE",
+  DQUO: "DOUBLE_QUOTES",
   SCLN: "SEMICOLON",
   LCTL: "LCTRL",
   RCTL: "RCTRL",
