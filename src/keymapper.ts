@@ -170,6 +170,9 @@ const layerModFuncMap = {
 };
 
 function mapSpecial(func: string, key: string): string | null {
+  if (func in modifierRawMap && key === "KC_NO") {
+    return modifierRawMap[func as keyof typeof modifierRawMap];
+  }
   if (func in modifierMap) {
     const mappedKey = mapNormalKeyWithoutBehaviour(key);
     if (!mappedKey) return null;
@@ -197,6 +200,15 @@ const modifierMap = {
   LGUI: (key: string) => `&kp LG(${key})`,
   RGUI: (key: string) => `&kp RG(${key})`,
   SGUI: (key: string) => `&kp LG(LS(${key}))`,
+};
+const modifierRawMap = {
+  LCA: `&kp LC(LALT)`,
+  RCA: `&kp RC(RALT)`,
+  HYPR: `&kp LG(LS(LA(LCTRL)))`,
+  MEH: `&kp LG(LS(LA(LCTRL)))`,
+  LGUI: `&kp LGUI`,
+  RGUI: `&kp RGUI`,
+  SGUI: `&kp LG(LSHIFT)`,
 };
 const specialMap = {
   LGUI_T: (key: string) => `&mt LGUI ${key}`,
