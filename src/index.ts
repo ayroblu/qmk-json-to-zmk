@@ -2,7 +2,8 @@ import fs from "fs";
 import { keymapper } from "./keymapper";
 import { chunk } from "./utils";
 
-const filePath = process.argv[2];
+const isKyria = process.argv[2] === '--kyria'
+const filePath = process.argv[isKyria ? 3 : 2];
 
 // cli stuff
 if (!filePath || !fs.existsSync(filePath)) {
@@ -18,6 +19,18 @@ const resultLayers = layers.map((layer) => {
   const rows = chunk(layer.map(keymapper), 6);
   const lastRow = rows[rows.length - 1].splice(3, 3);
   rows.push(lastRow);
+  if (isKyria) {
+    rows[0].push('     ', '     ')
+    rows[1].unshift('     ', '     ')
+    rows[2].push('     ', '     ')
+    rows[3].unshift('     ', '     ')
+    rows[4].push('&none', '&none')
+    rows[5].unshift('&none', '&none')
+    rows[6].push('&trans')
+    rows[6].unshift('&trans')
+    rows[7].push('&trans')
+    rows[7].unshift('&trans')
+  }
   return chunk(rows, 2);
 });
 
@@ -37,11 +50,19 @@ console.log(
               .join("  ")}`
         )
         .join("\n");
-      return `                layer_${i} {
+      if (isKyria) {
+        return `    layer_${i} {
+      bindings = <
+${bindings}
+      >;
+    };`;
+      } else {
+        return `                layer_${i} {
                         bindings = <
 ${bindings}
                         >;
                 };`;
+      }
     })
     .join("\n")
 );
